@@ -49,11 +49,9 @@ int main (int argc, char **argv)
 
 	fclose (file);
 
-	for (i = 0; i < vertexNumber * 3; i++)
-		printf ("%f\n", vertexArray[i]);
-
-	for (i = 0; i < faceNumber * 3; i++)
-		printf ("%d\n", faceArray[i]);
+	file = fopen ("out.bin", "w");
+	fwrite (vertexArray, sizeof(float), vertexNumber * 3, file);
+	fclose (file);
 
 	free (vertexArray);
 	free (faceArray);
