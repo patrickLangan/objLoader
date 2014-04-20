@@ -2,17 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-struct vertex {
-	float x;
-	float y;
-	float z;
-};
-
-struct face {
-	int a;
-	int b;
-	int c;
-};
+//Add error checking
 
 int main (int argc, char **argv)
 {
@@ -21,13 +11,16 @@ int main (int argc, char **argv)
 	unsigned int i = 0;
 	unsigned int vertNum = 0;
 	unsigned int faceNum = 0;
-	struct vertex *vertices;
-	struct face *faces;
+	float *vertices;
+	int *faces;
 
 
-	file = fopen ("test.obj", "r");
+	if (argc != 2)
+		return 1;
 
-	//Getting number of vertices and faces
+	file = fopen (argv[1], "r");
+
+	//Getting the number of vertices and faces
 	while (fgets (line, 255, file)) {
 		if (line[0] == 'v')
 			vertNum += 1;
@@ -35,8 +28,8 @@ int main (int argc, char **argv)
 			faceNum += 1;
 	}
 
-	vertices = malloc (vertNum * sizeof(vertices[0]));
-	faces = malloc (faceNum * sizeof(faces[0]));
+	vertices = malloc (vertNum * 3 * sizeof(float));
+	faces = malloc (faceNum * 3 * sizeof(int));
 
 	fseek (file, 0, SEEK_SET);
 
@@ -47,12 +40,12 @@ int main (int argc, char **argv)
 		if (line[0] == 'v') {
 			split = strtok (line, " ");
 			split = strtok (NULL, " ");
-			vertices[i].x = atof (split);
+			vertices[i] = atof (split);
 			split = strtok (NULL, " ");
-			vertices[i].y = atof (split);
+			vertices[i + 1] = atof (split);
 			split = strtok (NULL, " ");
-			vertices[i].z = atof (split);
-			i++;
+			vertices[i + 2] = atof (split);
+			i += 3;
 		} else if (line[0] == 'f') {
 			i = 0;
 			break;
@@ -63,12 +56,12 @@ int main (int argc, char **argv)
 		if (line[0] == 'f') {
 			split = strtok (line, " ");
 			split = strtok (NULL, " ");
-			faces[i].a = atoi (split);
+			faces[i] = atoi (split);
 			split = strtok (NULL, " ");
-			faces[i].b = atoi (split);
+			faces[i + 1] = atoi (split);
 			split = strtok (NULL, " ");
-			faces[i].c = atoi (split);
-			i++;
+			faces[i + 2] = atoi (split);
+			i += 3;
 		}
 	} while (fgets (line, 255, file));
 
@@ -79,10 +72,10 @@ int main (int argc, char **argv)
 	file = fopen ("out.bin", "w");
 
 	fwrite (&vertNum, sizeof(int), 1, file);
-	fwrite (vertices, sizeof(vertices[0]), vertNum, file);
+	fwrite (vertices, sizeof(float), vertNum * 3, file);
 
 	fwrite (&faceNum, sizeof(int), 1, file);
-	fwrite (faces, sizeof(faces[0]), faceNum, file);
+	fwrite (faces, sizeof(int), faceNum * 3, file);
 
 	fclose (file);
 
