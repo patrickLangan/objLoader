@@ -1,3 +1,3 @@
 all:
 	gcc conv.c -o conv
-	gcc loader.c -o loader
+	gcc load.c -o load
