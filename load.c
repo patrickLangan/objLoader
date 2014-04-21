@@ -39,5 +39,8 @@ int main (int argc, char **argv)
 		printf ("%d\n", faces[(i * 3) + 2]);
 	}
 
+	free (vertices);
+	free (faces);
+
 	return 0;
 }

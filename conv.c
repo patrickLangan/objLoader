@@ -56,11 +56,11 @@ int main (int argc, char **argv)
 		if (line[0] == 'f') {
 			split = strtok (line, " ");
 			split = strtok (NULL, " ");
-			faces[i] = atoi (split);
+			faces[i] = atoi (split) - 1;
 			split = strtok (NULL, " ");
-			faces[i + 1] = atoi (split);
+			faces[i + 1] = atoi (split) - 1;
 			split = strtok (NULL, " ");
-			faces[i + 2] = atoi (split);
+			faces[i + 2] = atoi (split) - 1;
 			i += 3;
 		}
 	} while (fgets (line, 255, file));
